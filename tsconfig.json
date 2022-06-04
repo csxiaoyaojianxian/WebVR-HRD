@@ -1,0 +1,15 @@
+{
+  "include": ["src/hrd/*.ts"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "target": "es2019",
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
+  }
+}
