@@ -2,7 +2,7 @@
  * @Author: victorsun
  * @Date: 2022-06-04 15:18:58
  * @LastEditors: victorsun
- * @LastEditTime: 2022-06-04 16:22:39
+ * @LastEditTime: 2022-06-05 01:43:17
  * @Descripttion: 华容道棋局类
  */
 import {
@@ -139,13 +139,16 @@ class HrdGameState {
 
   // 新棋局生成
   // 根据华容道规则，对一个武将棋子连续移动只算一步，因此在每一步移动成功后，需要继续对该棋子尝试移动，但是移动的方向有限制，不能向原方向移动
-  trySearchHeroNewState(game: HrdGame, heroIdx: number, dirIdx: number) {
+  trySearchHeroNewState(game: HrdGame, heroIdx: number, dirIdx: number, tryContinue: boolean = true) {
     let newState = this.moveHeroToNewState(heroIdx, dirIdx); //新棋局产生
     if (newState) {
       if (newState.addNewStatePattern(game)) { //处理新棋局，判重，添加到状态链中
         // 尝试连续移动，根据华容道游戏规则，连续的移动也只算一步
-        newState.tryHeroContinueMove(game, heroIdx, dirIdx);
+        tryContinue && newState.tryHeroContinueMove(game, heroIdx, dirIdx);
         return;
+      } else if (!tryContinue) {
+        // 自由移动(非求解)模式下，仍然存储棋局
+        game.states.push(newState);
       }
     }
   }

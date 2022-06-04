@@ -1,0 +1,59 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.outer {
+  width: 100%;
+  height: 100%;
+  min-width: 390px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board {
+  width: 390px;
+  height: 490px;
+  background-image: url('/public/img/bg.jpg');
+  background-size: 100%;
+}
+
+.container-2D {
+  width: 360px;
+  height: 450px;
+  top: 16px;
+  left: 16px;
+  position: relative;
+}
+
+.container-2D .warrior {
+  background-size: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  font-size: 22px;
+  transition: all 0.5s;
+}
+
+.container-2D .type-1 {
+  width: 90px;
+  height: 90px;
+}
+
+.container-2D .type-2 {
+  width: 90px;
+  height: 180px;
+}
+
+.container-2D .type-3 {
+  width: 180px;
+  height: 90px;
+}
+
+.container-2D .type-4 {
+  width: 180px;
+  height: 180px;
+}

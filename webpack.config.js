@@ -2,7 +2,7 @@
  * @Author: victorsun
  * @Date: 2022-05-04 20:13:37
  * @LastEditors: victorsun
- * @LastEditTime: 2022-06-04 14:59:31
+ * @LastEditTime: 2022-06-04 22:28:24
  * @Descripttion: 
  */
 const path = require('path');
@@ -26,6 +26,11 @@ module.exports = {
       {
         test: /\.js$/,
         use: ['babel-loader'],
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
         exclude: /node_modules/,
       },
     ],
