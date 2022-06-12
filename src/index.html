@@ -2,7 +2,7 @@
  * @Author: victorsun
  * @Date: 2022-06-04 14:47:13
  * @LastEditors: victorsun
- * @LastEditTime: 2022-06-05 22:24:04
+ * @LastEditTime: 2022-06-13 02:02:47
  * @Descripttion: 
 -->
 <!DOCTYPE html>
@@ -14,12 +14,12 @@
   <script src="./public/lib/jquery.min.js"></script>
   <script src="./public/lib/aframe.min.js"></script>
   <script src="./public/lib/aframe-extras.min.js"></script>
-
+  <script src="./public/lib/aframe-proxy-event-component.min.js"></script>
   <title>WebXR-华容道</title>
 </head>
 <body>
 
-<a-scene>
+<a-scene stats debug>
   <a-assets>
     <img id="ceil" src="./public/textures/ceil.jpeg">
     <img id="floor" src="./public/textures/floor.jpg">
@@ -29,109 +29,90 @@
     <img id="wood-normal" src="./public/textures/wood_normal.jpg">
     <img id="bricks" src="./public/textures/bricks.jpg">
     <img id="bricks-normal" src="./public/textures/bricks_normal.jpg">
+    <a-asset-item id="caocao" src="./public/models/caocao.gltf"></a-asset-item>
+    <a-mixin id="default-font" scale="2 2 2" text="align: center; font: ./public/font/font187-msdf/font187-msdf.json; negate: false; color: #460606; width: 3;" rotation="-90 0 0" position="0 0.15 0"></a-mixin>
     <a-mixin id="wall-mixin" geometry="width: 10; height: 5; depth: 0.2" material="src:#bricks; normalMap: #bricks-normal; repeat: 2 1"></a-mixin>
     <a-mixin id="warrior-mixin" scale="0.98 0.98 0.98" material="src: #wood; normalMap: #wood-normal;" shadow></a-mixin>
-    <a-asset-item id="caocao" src="./public/models/caocao/scene.gltf"></a-asset-item>
-    <a-mixin id="default-font" scale="2 2 2" text="align: center; font: ./public/font/font187-msdf/font187-msdf.json; negate: false; color: #460606; width: 3;" rotation="-90 0 0" position="0 0.15 0"></a-mixin>
+    <a-mixin id="blank-cell" rotation="-90 0 0" scale="0.9 0.9 1" material="opacity: 0"></a-mixin>
   </a-assets>
 
-  <!-- <a-entity light="type: spot; angle: 60" position="2 1 3" target="#e"> </a-entity> -->
+  <a-entity>
+    <a-plane class="floor" width="10" height="10" material="src: #floor; normalMap: #floor-normal; repeat: 12 12;" rotation="-90 0 0" position="0 0 0" shadow="receive: true; cast: false"></a-plane>
+    <a-box class="wall-1" mixin="wall-mixin" position="0 2.5 5" rotation="0 180 0"></a-box>
+    <a-box class="wall-2" mixin="wall-mixin" position="0 2.5 -5" rotation="0 180 0"></a-box>
+    <a-box class="wall-3" mixin="wall-mixin" position="5 2.5 0" rotation="180 90 0"></a-box>
+    <a-box class="wall-4" mixin="wall-mixin" position="-5 2.5 0" rotation="180 90 0"></a-box>
+    <a-box class="ceil" width="10" depth="10" height="0.5" position="0 5 0" material="src: #ceil; repeat: 8 8"></a-box>
+  </a-entity>
 
-  <a-sky color="#000010"></a-sky>
-  <!-- <a-plane class="floor" width="30" height="30" material="src:#wood; normalMap: #wood-normal; normalScale: 30 30; repeat: 5 5;" rotation="-90 0 0" position="0 0 0" shadow="receive: true; cast: false"></a-plane> -->
-  <a-plane class="floor" width="10" height="10" material="src: #floor; normalMap: #floor-normal; repeat: 12 12;" rotation="-90 0 0" position="0 0 0" shadow="receive: true; cast: false"></a-plane>
-  <a-box class="wall-1" mixin="wall-mixin" position="0 2.5 5" rotation="0 180 0"></a-box>
-  <a-box class="wall-2" mixin="wall-mixin" position="0 2.5 -5" rotation="0 180 0"></a-box>
-  <a-box class="wall-3" mixin="wall-mixin" position="5 2.5 0" rotation="180 90 0"></a-box>
-  <a-box class="wall-4" mixin="wall-mixin" position="-5 2.5 0" rotation="180 90 0"></a-box>
-  <a-box class="ceil" width="10" depth="10" height="0.5" position="0 5 0" material="src: #ceil; repeat: 8 8"></a-box>
-
-  <!-- <a-entity id="model-4" class="box" scale="4 4.6 4" position="-7 0 -7" rotation="0 30 0" gltf-model="#model4" material="shader: flat" shadow animation-control="target: #model-4; clip: Take 01; duration: 3; loop: once"></a-entity>
-  <a-entity obj-model="obj: #mario-obj; mtl: #mario-mtl" scale="0.005 0.005 0.005" position="-7.076 0.325 -7.063" rotation="0 50 0"></a-entity>
-
-  <a-entity id="model-2" class="box" scale="0.5 0.5 0.5" position="-3 0 -7" rotation="0 180 0" gltf-model="#model2" material="shader: flat" shadow animation-control="target: #model-2; clip: Take 01; duration: 3; loop: once"></a-entity>
-  <a-entity id="model-1" scale="0.5 0.5 0.5" position="-7 0.28 -3.5" rotation="0 180 0" gltf-model="#model1" material="shader: flat" shadow></a-entity> -->
-
-  <!-- 华容道 -->
-  <a-box shadow class="outer" geometry="width: 2.4; height: 0.1; depth: 3" position="0 0.05 -3" material="src: #wood2">
+  <!-- 华容道棋盘 -->
+  <a-box shadow class="outer" geometry="width: 2.4; height: 0.1; depth: 3" position="0 1.52 -2" rotation="90 0 0" material="src: #wood2">
     <a-box shadow class="container-border" geometry="width: 2.4; height: 0.3; depth: 0.05" position="0 0.1 -1.525" material="src: #wood2"></a-box>
     <a-box shadow class="container-border" geometry="width: 3.1; height: 0.3; depth: 0.05" position="1.225 0.1 0" rotation="0 90 0" material="src: #wood2"></a-box>
     <a-box shadow class="container-border" geometry="width: 2.4; height: 0.3; depth: 0.05" position="0 0.1 1.525" material="src: #wood2"></a-box>
     <a-box shadow class="container-border" geometry="width: 3.1; height: 0.3; depth: 0.05" position="-1.225 0.1 0" rotation="0 90 0" material="src: #wood2"></a-box>
-    <!-- 重置棋子坐标系 -->
-    <a-entity geometry="primitive: box; width: 0; height: 0; depth: 0" position="-1.2 0.05 -1.5">
-      <a-box mixin="warrior-mixin" class="board warrior warrior-block" geometry="width: 0.6; height: 0.3; depth: 0.6" position="0.3 0.15 0.3">
-        <a-entity mixin="default-font" text="value: 卒"></a-entity>
-      </a-box>
-      <a-box mixin="warrior-mixin" class="board warrior warrior-box" geometry="width: 1.2; height: 0.3; depth: 1.2" position="1.2 0.15 0.6">
-        <a-entity mixin="default-font" text="value: 曹操"></a-entity>
-        <a-entity id="model" scale="0.5 0.5 0.5" position="0 0.15 0" rotation="0 180 0" shadow material gltf-model="#caocao" animation-mixer></a-entity>
-      </a-box>
-      <a-box mixin="warrior-mixin" class="board warrior warrior-vbar" geometry="width: 0.6; height: 0.3; depth: 1.2" position="1.5 0.15 2.4">
-        <a-entity mixin="default-font" text="value: 赵\n云"></a-entity>
-      </a-box>
-      <a-box mixin="warrior-mixin" class="board warrior warrior-hbar" geometry="width: 1.2; height: 0.3; depth: 0.6" position="1.8 0.15 1.5">
-        <a-entity mixin="default-font" text="value: 关羽"></a-entity>
-      </a-box>
-      <a-box mixin="warrior-mixin" class="board warrior warrior-vbar" geometry="width: 0.6; height: 0.3; depth: 1.2" position="0.9 0.15 2.4">
-        <a-entity mixin="default-font" text="value: 黄\n忠"></a-entity>
-      </a-box>
-      <a-box mixin="warrior-mixin" class="board warrior warrior-vbar" geometry="width: 0.6; height: 0.3; depth: 1.2" position="2.1 0.15 0.6">
-        <a-entity mixin="default-font" text="value: 张\n飞"></a-entity>
-      </a-box>
-      <a-box mixin="warrior-mixin" class="board warrior warrior-vbar" geometry="width: 0.6; height: 0.3; depth: 1.2" position="2.1 0.15 2.4">
-        <a-entity mixin="default-font" text="value: 马\n超"></a-entity>
-      </a-box>
-      <a-box mixin="warrior-mixin" class="board warrior warrior-block" geometry="width: 0.6; height: 0.3; depth: 0.6" position="0.3 0.15 0.9">
-        <a-entity mixin="default-font" text="value: 卒"></a-entity>
-      </a-box>
-      <a-box mixin="warrior-mixin" class="board warrior warrior-block" geometry="width: 0.6; height: 0.3; depth: 0.6" position="0.3 0.15 2.1">
-        <a-entity mixin="default-font" text="value: 卒"></a-entity>
-      </a-box>
-      <a-box mixin="warrior-mixin" class="board warrior warrior-block" geometry="width: 0.6; height: 0.3; depth: 0.6" position="0.3 0.15 2.7">
-        <a-entity mixin="default-font" text="value: 卒"></a-entity>
-      </a-box>
-    </a-entity>
+    <!-- reset -->
+    <a-entity class="container-3D" geometry="primitive: box; width: 0; height: 0; depth: 0" position="-1.2 0.05 -1.5"></a-entity>
   </a-box>
 
+  <!-- button -->
+  <a-box triggerdown-resolve class="button" width="1" material="color: #a19b9b" geometry="depth: 0.1; height: 0.38" rotation="0 45 0" position="-3.144 1.97722 -1.29521">
+    <a-text value="resolve" text="align: center" rotation="" position="0 0 0.06"></a-text>
+  </a-box>
 
-  <a-entity light="type: ambient; color: #BBB; intensity: 0.7;"></a-entity>
-  <a-entity position="0 4.6 -1.38" light="type: point; intensity: 0.7; castShadow: true"></a-entity>
+  <!-- model -->
+  <a-entity id="model" highlighter scale="0.005 0.005 0.005" position="1.85 0 -2" rotation="0 -50 0" shadow material gltf-model="#caocao" animation-mixer></a-entity>
 
-
-
-  <!-- <a-entity camera position="-8 1.6 1.15" look-controls wasd-controls position-limit="maxPos: 14 5 14; minPos: -14 0.1 -14">
-    <a-entity
-      cursor="fuse: true; fuseTimeout: 1500"
-      position="0 0 -1"
-      raycaster="far: 20; interval: 1000; objects: .box"
-      animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
-      animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
-      animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
-      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03" material="color: red; shader: flat">
+  <!-- camera -->
+  <a-entity id="cameraRig" rotation="0 0 0">
+    <a-entity position="0 1.6 1" camera wasd-controls look-controls position-limit="maxPos: 4.5 2 4.5; minPos: -4.5 0 -4.5">
+      <a-cursor visible="false"></a-cursor>
     </a-entity>
-  </a-entity> -->
+    <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: highPoly; color: #ffcccc"></a-entity>
+    <a-entity id="rightHand" hand-controls="hand: right; handModelStyle: highPoly; color: #ffcccc"
+      proxy-event__triggerdownRight="event: triggerdown; to: .warrior; as: triggerdownRight"
+      proxy-event__triggerupRight="event: triggerup; to: .cell; as: triggerupRight"
+      proxy-event__triggerdown="event: triggerdown; to: .button; as: triggerdown">
+      <a-entity
+        data-hand="right"
+        raycaster="objects: .warrior,.cell,.button; showLine: true; far: 5; lineColor: red"
+        cursor="fuse: true; fuseTimeout: 1500"
+        position="0 0 0"
+      ></a-entity>
+    </a-entity>
+  </a-entity>
 
-  <!-- 自定义相机 -->
-  <a-camera>
-    <!-- 光标 -->
-    <a-cursor></a-cursor>
-  </a-camera>
+  <!-- light -->
+  <a-entity light="type: ambient; color: #BBB; intensity: 0.7;"></a-entity>
+  <a-entity position="0.5 4.6 1.3" light="type: point; intensity: 0.5; castShadow: true"></a-entity>
+
+  <!-- debug-tool -->
+  <a-entity visible="false" class="debug" position="0 1.5 -0.4" text="align: center; value: debug"></a-entity>
 
 </a-scene>
 
 <script>
+let i = 0;
+const logArr = [];
+function logAdd(str) {
+  i++;
+  if (logArr.length > 30) {
+    logArr.shift()
+  }
+  logArr.push(i + ': ' + str)
+  document.querySelector('.debug').setAttribute('text', 'align: left; value: ' + logArr.join('\n'));
+}
+</script>
 
-document.getElementById('model').addEventListener('model-loaded', (e) => {
-  // const meshModel = this.el.getObject3D('mesh');
-
-  // console.log(11111, e, e.detail.model);
-
-  // //模型自发光
-  // e.detail.model.material.emissive =  e.detail.model.material.color;
-  // // e.detail.model.material.emissiveMap = e.detail.model.material.map;
-});
-
+<style>
+.vc-switch {
+  top: 0;
+  bottom: unset!important;
+}
+</style>
+<script src="./public/lib/vconsole.min.js"></script>
+<script>
+  var vConsole = new VConsole();
 </script>
 
 </body>

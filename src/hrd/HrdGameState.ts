@@ -2,7 +2,7 @@
  * @Author: victorsun
  * @Date: 2022-06-04 15:18:58
  * @LastEditors: victorsun
- * @LastEditTime: 2022-06-05 01:43:17
+ * @LastEditTime: 2022-06-12 23:58:26
  * @Descripttion: 华容道棋局类
  */
 import {
@@ -145,12 +145,14 @@ class HrdGameState {
       if (newState.addNewStatePattern(game)) { //处理新棋局，判重，添加到状态链中
         // 尝试连续移动，根据华容道游戏规则，连续的移动也只算一步
         tryContinue && newState.tryHeroContinueMove(game, heroIdx, dirIdx);
-        return;
+        return true;
       } else if (!tryContinue) {
         // 自由移动(非求解)模式下，仍然存储棋局
         game.states.push(newState);
       }
+      return true;
     }
+    return false;
   }
 
   // 移动武将并产生新棋局
@@ -181,6 +183,9 @@ class HrdGameState {
 
   // 判断指定武将是否能向指定方向移动
   canHeroMove(heroIdx: number, dirIdx: number) {
+    if (dirIdx < 0) {
+      return false;
+    }
     let cv1, cv2, cv3, cv4;
     let canMove = false;
     const hero = this.heroes[heroIdx];
