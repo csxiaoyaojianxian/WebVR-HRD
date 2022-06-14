@@ -2,13 +2,12 @@
  * @Author: victorsun
  * @Date: 2022-06-13 01:59:39
  * @LastEditors: victorsun
- * @LastEditTime: 2022-06-13 02:18:09
+ * @LastEditTime: 2022-06-13 16:42:30
  * @Descripttion: 
  */
 AFRAME.registerComponent('raycaster-listen-warrior', {
   init () {
     this.raycaster = null;
-    this.originPosition = null;
   },
   play() {
     this.el.addEventListener('raycaster-intersected', this.onIntersected.bind(this));

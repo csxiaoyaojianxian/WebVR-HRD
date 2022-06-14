@@ -2,7 +2,7 @@
  * @Author: victorsun
  * @Date: 2022-06-04 14:47:13
  * @LastEditors: victorsun
- * @LastEditTime: 2022-06-13 02:02:47
+ * @LastEditTime: 2022-06-13 19:37:19
  * @Descripttion: 
 -->
 <!DOCTYPE html>
@@ -29,11 +29,20 @@
     <img id="wood-normal" src="./public/textures/wood_normal.jpg">
     <img id="bricks" src="./public/textures/bricks.jpg">
     <img id="bricks-normal" src="./public/textures/bricks_normal.jpg">
+    <a-asset-item id="cc" src="./public/models/caocao_model.gltf"></a-asset-item>
     <a-asset-item id="caocao" src="./public/models/caocao.gltf"></a-asset-item>
+    <a-asset-item id="guanyu" src="./public/models/guanyu.gltf"></a-asset-item>
+    <a-asset-item id="zhangfei" src="./public/models/zhangfei.gltf"></a-asset-item>
+    <a-asset-item id="zhaoyun" src="./public/models/zhaoyun.gltf"></a-asset-item>
+    <a-asset-item id="huangzhong" src="./public/models/huangzhong.gltf"></a-asset-item>
+    <a-asset-item id="machao" src="./public/models/machao.gltf"></a-asset-item>
+    <a-asset-item id="zu" src="./public/models/zu.gltf"></a-asset-item>
+    <a-asset-item id="box" src="./public/models/box.gltf"></a-asset-item>
     <a-mixin id="default-font" scale="2 2 2" text="align: center; font: ./public/font/font187-msdf/font187-msdf.json; negate: false; color: #460606; width: 3;" rotation="-90 0 0" position="0 0.15 0"></a-mixin>
     <a-mixin id="wall-mixin" geometry="width: 10; height: 5; depth: 0.2" material="src:#bricks; normalMap: #bricks-normal; repeat: 2 1"></a-mixin>
-    <a-mixin id="warrior-mixin" scale="0.98 0.98 0.98" material="src: #wood; normalMap: #wood-normal;" shadow></a-mixin>
-    <a-mixin id="blank-cell" rotation="-90 0 0" scale="0.9 0.9 1" material="opacity: 0"></a-mixin>
+    <a-mixin id="warrior-mixin" scale="0.98 0.98 0.98" material="src: #wood2;" shadow></a-mixin>
+    <a-mixin id="warrior-mixin2" scale="0.98 0.98 0.98"></a-mixin>
+    <a-mixin id="blank-cell" rotation="-90 0 0" scale="0.9 0.9 1" material="opacity: 0; color: #90867a;"></a-mixin>
   </a-assets>
 
   <a-entity>
@@ -46,22 +55,24 @@
   </a-entity>
 
   <!-- 华容道棋盘 -->
-  <a-box shadow class="outer" geometry="width: 2.4; height: 0.1; depth: 3" position="0 1.52 -2" rotation="90 0 0" material="src: #wood2">
-    <a-box shadow class="container-border" geometry="width: 2.4; height: 0.3; depth: 0.05" position="0 0.1 -1.525" material="src: #wood2"></a-box>
-    <a-box shadow class="container-border" geometry="width: 3.1; height: 0.3; depth: 0.05" position="1.225 0.1 0" rotation="0 90 0" material="src: #wood2"></a-box>
-    <a-box shadow class="container-border" geometry="width: 2.4; height: 0.3; depth: 0.05" position="0 0.1 1.525" material="src: #wood2"></a-box>
-    <a-box shadow class="container-border" geometry="width: 3.1; height: 0.3; depth: 0.05" position="-1.225 0.1 0" rotation="0 90 0" material="src: #wood2"></a-box>
+  <a-box shadow class="outer" geometry="width: 2.4; height: 0.1; depth: 3" position="0 1.6 -2" rotation="90 0 0" material="src: #wood; normalMap: #wood-normal;">
+    <a-box shadow class="container-border" geometry="width: 2.4; height: 0.3; depth: 0.05" position="0 0.1 -1.525" material="src: #wood; normalMap: #wood-normal; repeat: 6 1;"></a-box>
+    <a-box shadow class="container-border" geometry="width: 3.1; height: 0.3; depth: 0.05" position="1.225 0.1 0" rotation="0 90 0" material="src: #wood; normalMap: #wood-normal; repeat: 7 1;"></a-box>
+    <a-box shadow class="container-border" geometry="width: 0.6; height: 0.3; depth: 0.05" position="-0.9 0.1 1.525" material="src: #wood; normalMap: #wood-normal; repeat: 2 1;"></a-box>
+    <a-box shadow class="container-border" geometry="width: 0.6; height: 0.3; depth: 0.05" position="0.9 0.1 1.525" material="src: #wood; normalMap: #wood-normal; repeat: 2 1;"></a-box>
+    <a-box shadow class="container-border" geometry="width: 3.1; height: 0.3; depth: 0.05" position="-1.225 0.1 0" rotation="0 90 0" material="src: #wood; normalMap: #wood-normal; repeat: 7 1;"></a-box>
     <!-- reset -->
     <a-entity class="container-3D" geometry="primitive: box; width: 0; height: 0; depth: 0" position="-1.2 0.05 -1.5"></a-entity>
   </a-box>
 
   <!-- button -->
-  <a-box triggerdown-resolve class="button" width="1" material="color: #a19b9b" geometry="depth: 0.1; height: 0.38" rotation="0 45 0" position="-3.144 1.97722 -1.29521">
-    <a-text value="resolve" text="align: center" rotation="" position="0 0 0.06"></a-text>
+  <a-box triggerdown-resolve class="button" width="1" material="color: #a19b9b" geometry="depth: 0.3; height: 0.38" rotation="0 45 0" position="-2.25 2 -1.3">
+    <a-text value="resolve" text="align: center" rotation="" position="0.014 0.019 0.18"></a-text>
   </a-box>
 
   <!-- model -->
-  <a-entity id="model" highlighter scale="0.005 0.005 0.005" position="1.85 0 -2" rotation="0 -50 0" shadow material gltf-model="#caocao" animation-mixer></a-entity>
+  <a-entity id="model-box" highlighter="type: 3;" scale="0.005 0.005 0.005" position="1.95 0 -1.6" rotation="0 -60 0" gltf-model="#box" shadow></a-entity>
+  <a-entity id="model" highlighter="type: 1;" scale="0.0036 0.0036 0.0036" position="2.05 0.05 -1.64" rotation="0 -50 0" shadow material gltf-model="#cc" animation-mixer></a-entity>
 
   <!-- camera -->
   <a-entity id="cameraRig" rotation="0 0 0">
@@ -75,7 +86,7 @@
       proxy-event__triggerdown="event: triggerdown; to: .button; as: triggerdown">
       <a-entity
         data-hand="right"
-        raycaster="objects: .warrior,.cell,.button; showLine: true; far: 5; lineColor: red"
+        raycaster="objects: .warrior,.cell,.button; showLine: true; far: 5; lineColor: red; lineOpacity: 0.2"
         cursor="fuse: true; fuseTimeout: 1500"
         position="0 0 0"
       ></a-entity>
@@ -83,11 +94,11 @@
   </a-entity>
 
   <!-- light -->
-  <a-entity light="type: ambient; color: #BBB; intensity: 0.7;"></a-entity>
-  <a-entity position="0.5 4.6 1.3" light="type: point; intensity: 0.5; castShadow: true"></a-entity>
+  <a-entity light="type: ambient; color: #BBB; intensity: 0.85;"></a-entity>
+  <a-entity position="2 4.6 1.3" light="type: point; intensity: 0.75; castShadow: true"></a-entity>
 
   <!-- debug-tool -->
-  <a-entity visible="false" class="debug" position="0 1.5 -0.4" text="align: center; value: debug"></a-entity>
+  <a-entity class="debug" position="2.1 2 -1.3" rotation="0 -45 0" text="align: center; value: debug"></a-entity>
 
 </a-scene>
 

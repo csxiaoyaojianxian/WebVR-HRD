@@ -2,9 +2,11 @@
  * @Author: victorsun
  * @Date: 2022-06-13 01:59:02
  * @LastEditors: victorsun
- * @LastEditTime: 2022-06-13 02:12:45
+ * @LastEditTime: 2022-06-13 16:40:57
  * @Descripttion: 
  */
+window.currentRaycasterRowIndex = -1;
+window.currentRaycasterColIndex = -1;
 AFRAME.registerComponent('raycaster-listen-cell', {
   init() {
     this.raycaster = null;
@@ -21,6 +23,10 @@ AFRAME.registerComponent('raycaster-listen-cell', {
     this.el.removeEventListener('triggerupRight', this.onTriggerupRight.bind(this));
   },
   onIntersected: function(evt) {
+    // logAdd('onIntersected ' + this.el.dataset.rowIndex + ' ' + this.el.dataset.colIndex);
+    window.currentRaycasterRowIndex = this.el.dataset.rowIndex;
+    window.currentRaycasterColIndex = this.el.dataset.colIndex;
+
     this.raycaster = evt.detail.el;
     const availableCell = window.hrdGetAvailableCell(window.hrdGame, window.currentWarriorIndex)
     if (!availableCell) {
@@ -40,7 +46,9 @@ AFRAME.registerComponent('raycaster-listen-cell', {
     });
   },
   onIntersectedCleared: function(evt) {
+    // logAdd('onIntersectedCleared ' + this.el.dataset.rowIndex + ' ' + this.el.dataset.colIndex);
     this.raycaster = null;
+    this.el.setAttribute('material', 'opacity', '0');
     this.cells.forEach(cell => {
       const [top, left] = cell.split('_');
       // this.el.setAttribute('material', 'opacity', '0');
@@ -49,10 +57,16 @@ AFRAME.registerComponent('raycaster-listen-cell', {
     this.cells = [];
   },
   onTriggerupRight: function(evt) {
-    if (this.raycaster && currentWarriorIndex >= 0) {
-      window.doMove(window.hrdGame, window.currentWarriorIndex, this.el.dataset.rowIndex, this.el.dataset.colIndex)
-      document.querySelector(`.hero-${currentWarriorIndex}`).setAttribute('material', 'opacity', '1');
-      currentWarriorIndex = -1;
+    if (this.raycaster && window.currentWarriorIndex >= 0) {
+      // const heroData = window.hrdGame.states[window.hrdGame.states.length - 1].heroes[window.currentWarriorIndex];
+      // if (heroData.top == this.el.dataset.rowIndex && heroData.left == this.el.dataset.colIndex) {
+      //   return;
+      // }
+      logAdd(`[step:${window.hrdGame.states.length}] do move by trigger, row ${this.el.dataset.rowIndex} / col ${this.el.dataset.colIndex}`);
+      // window.doMove(window.hrdGame, window.currentWarriorIndex, this.el.dataset.rowIndex, this.el.dataset.colIndex);
+      window.doMove(window.hrdGame, window.currentWarriorIndex, window.currentRaycasterRowIndex, window.currentRaycasterColIndex);
+      document.querySelector(`.hero-${window.currentWarriorIndex}`).setAttribute('material', 'opacity', '1');
+      window.currentWarriorIndex = -1;
     }
   },
 });

@@ -2,14 +2,14 @@
  * @Author: victorsun
  * @Date: 2022-06-04 21:03:33
  * @LastEditors: victorsun
- * @LastEditTime: 2022-06-13 01:26:38
+ * @LastEditTime: 2022-06-13 19:28:50
  * @Descripttion: 2D渲染 state.board => DOM
  */
 import { HRD_GAME_ROW, HRD_GAME_COL } from '../hrd/config';
 // 最小单位尺寸
 const cellWidth = 0.6;
 const cellHeight = 0.6;
-const cellDepth = 0.3;
+const cellDepth = 0.008;
 
 // type1-4尺寸定义(固定)
 const warriorSize = [
@@ -33,13 +33,21 @@ function render3D(state, init = false) {
     ['曹操'], // type 4 box
   ];
   
-  // const imgList = [
-  //   [],
-  //   ['zu', 'zu', 'zu', 'zu'], // type 1 block
-  //   ['zhangfei', 'huangzhong', 'machao', 'zhaoyun'], // type 2 vbar
-  //   ['guanyu'], // type 3 hbar
-  //   ['caocao'], // type 4 box
-  // ];
+  const modelList = [
+    [],
+    ['zu', 'zu', 'zu', 'zu'], // type 1 block
+    ['zhangfei', 'huangzhong', 'machao', 'zhaoyun'], // type 2 vbar
+    ['guanyu'], // type 3 hbar
+    ['caocao'], // type 4 box
+  ];
+
+  const colorList = [
+    [],
+    ['#220757', '#220757', '#220757', '#220757'], // type 1 block
+    ['#073C57', '#666300', '#42064D', '#573C07'], // type 2 vbar
+    ['#850B0B'], // type 3 hbar
+    ['#420303'], // type 4 box
+  ];
 
   if (init) {
     $('.container-3D').html('');
@@ -51,16 +59,20 @@ function render3D(state, init = false) {
   }
   state.heroes.forEach((hero, index) => {
     const size = warriorSize[hero.type];
-    const name = nameList[hero.type].shift();
-    // const img = imgList[hero.type].shift();
+    // const name = nameList[hero.type].shift();
+    const color = colorList[hero.type].shift();
+    const model = modelList[hero.type].shift();
     if (init) {
-      $('.container-3D').append(`<a-box
+      // mixin="warrior-mixin"
+      $('.container-3D').append(`<a-entity
           data-index=${index}
           raycaster-listen-warrior
-          mixin="warrior-mixin" class="warrior hero-${index}" geometry="width: ${size[0] * cellWidth}; height: ${cellDepth}; depth: ${size[1] * cellHeight}"
+          mixin="warrior-mixin2"
+          material="color: ${color}"
+          class="warrior hero-${index}" geometry="width: ${size[0] * cellWidth}; height: ${cellDepth}; depth: ${size[1] * cellHeight}"
           position="${hero.left * cellWidth + size[0] * cellWidth / 2} ${cellDepth / 2} ${hero.top * cellHeight + size[1] * cellHeight / 2}">
-          <a-entity mixin="default-font" text="value: ${name}"></a-entity>
-        </a-box>`);
+          <a-entity highlighter="type: 2;" scale="0.00295 0.00295 0.00295" position="0 0.125 0" rotation="-90 0 0" shadow gltf-model="#${model}" animation-mixer></a-entity>
+        </a-entity>`);
     } else {
       $(`.container-3D .hero-${index}`).attr('position', `${hero.left * cellWidth + size[0] * cellWidth / 2} ${cellDepth / 2} ${hero.top * cellHeight + size[1] * cellHeight / 2}`);
     }
@@ -217,6 +229,7 @@ function doMove(hrdGame, warriorIndex = -1, targetRowIndex = -1, targetColIndex 
   // 判断是否成功
   if (hrdGame.isEscaped(hrdGame.states[hrdGame.states.length - 1])) {
     document.querySelector('.button a-text').setAttribute('value', 'success');
+    document.querySelector('#model-box').setAttribute("animation-mixer", 'loop: once; clampWhenFinished: true;');
   }
   
 }
@@ -230,6 +243,7 @@ function resolve(hrdGame, callback) {
     const timer = setInterval(function() {
       if (index >= res.length) {
         document.querySelector('.button a-text').setAttribute('value', 'success');
+        document.querySelector('#model-box').setAttribute("animation-mixer", 'loop: once; clampWhenFinished: true;');
         clearInterval(timer);
         callback && callback()
       }
