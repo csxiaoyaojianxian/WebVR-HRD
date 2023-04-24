@@ -15,6 +15,8 @@ import './components/raycasterListenCell';
 import './components/raycasterListenWarrior';
 import './components/triggerdownResolve';
 
+import './components/handControl';
+
 window.render3D = render3D;
 window.doMove = doMove;
 window.hrdGetAvailableCell = hrdGetAvailableCell;

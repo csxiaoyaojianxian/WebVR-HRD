@@ -79,8 +79,9 @@
     <a-entity position="0 1.6 1" camera wasd-controls look-controls position-limit="maxPos: 4.5 2 4.5; minPos: -4.5 0 -4.5">
       <a-cursor visible="false"></a-cursor>
     </a-entity>
-    <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: highPoly; color: #ffcccc"></a-entity>
-    <a-entity id="rightHand" hand-controls="hand: right; handModelStyle: highPoly; color: #ffcccc"
+    <!-- <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: highPoly; color: #ffcccc"></a-entity> -->
+    <a-entity id="leftHand" tracked-controls="controller: 0; idPrefix: OpenVR" hand-control="hand: left; handModelStyle: highPoly; color: #ffcccc"></a-entity>
+    <a-entity id="rightHand" hand-control="hand: right; handModelStyle: highPoly; color: #ffcccc"
       proxy-event__triggerdownRight="event: triggerdown; to: .warrior; as: triggerdownRight"
       proxy-event__triggerupRight="event: triggerup; to: .cell; as: triggerupRight"
       proxy-event__triggerdown="event: triggerdown; to: .button; as: triggerdown">
